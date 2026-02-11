@@ -6,11 +6,26 @@ services:
     container_name: namenode
     user: root
     hostname: namenode
-    command: ["hdfs", "namenode"]
+    #command: >
+     # sh -c "if [ ! -d /hadoop/dfs/name/current ]; then
+      #         /opt/hadoop/bin/hdfs namenode -format -force;
+       #      fi;
+        #     /opt/hadoop/bin/hdfs namenode"
+    #A versão abaixo ela é mais segura em produção
+    #pois caso o volume falhe ou esteja vazio por algum motivo, ele não recria outro.
+    command: >
+      bash -c " if [ ! -f /hadoop/dfs/name/current/VERSION ]; then
+                  echo 'Formatting NameNode...'; hdfs namenode -format -force;
+                fi && hdfs namenode"
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
       - namenode_data:/hadoop/dfs/name
     ports:
       - "9870:9870"
@@ -27,7 +42,12 @@ services:
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
       - datanode1_data:/hadoop/dfs/data
     depends_on:
       - namenode
@@ -43,7 +63,12 @@ services:
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
       - datanode2_data:/hadoop/dfs/data
     depends_on:
       - namenode
@@ -59,7 +84,12 @@ services:
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
     ports:
       - "8383:8088"
     depends_on:
@@ -75,7 +105,12 @@ services:
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
     depends_on:
       - resourcemanager
     networks:
@@ -89,12 +124,18 @@ services:
     environment:
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
     volumes:
-      - ./config:/opt/hadoop/etc/hadoop
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./config/capacity-scheduler.xml:/opt/hadoop/etc/hadoop/capacity-scheduler.xml
+      - ./config/workers:/opt/hadoop/etc/hadoop/workers
+      - ./config/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
     depends_on:
       - resourcemanager
     networks:
       - hadoop-net
-
+    
+  #FASE 2 adicionar um componente HIVE 
 
 networks:
   hadoop-net:
