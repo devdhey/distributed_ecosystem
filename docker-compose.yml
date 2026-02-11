@@ -1,0 +1,106 @@
+#FASE 1 
+services:
+
+  namenode:
+    image: apache/hadoop:3.3.6
+    container_name: namenode
+    user: root
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+      - namenode_data:/hadoop/dfs/name
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+    networks:
+      - hadoop-net
+
+  datanode1:
+    image: apache/hadoop:3.3.6
+    container_name: datanode1
+    user: root
+    hostname: datanode1
+    command: ["hdfs", "datanode"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+      - datanode1_data:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-net
+
+  datanode2:
+    image: apache/hadoop:3.3.6
+    container_name: datanode2
+    user: root
+    hostname: datanode2
+    command: ["hdfs", "datanode"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+      - datanode2_data:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-net
+
+  resourcemanager:
+    image: apache/hadoop:3.3.6
+    container_name: resourcemanager
+    user: root
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+    ports:
+      - "8383:8088"
+    depends_on:
+      - namenode
+    networks:
+      - hadoop-net
+
+  nodemanager1:
+    image: apache/hadoop:3.3.6
+    container_name: nodemanager1
+    hostname: nodemanager1
+    command: ["yarn", "nodemanager"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+    depends_on:
+      - resourcemanager
+    networks:
+      - hadoop-net
+
+  nodemanager2:
+    image: apache/hadoop:3.3.6
+    container_name: nodemanager2
+    hostname: nodemanager2
+    command: ["yarn", "nodemanager"]
+    environment:
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./config:/opt/hadoop/etc/hadoop
+    depends_on:
+      - resourcemanager
+    networks:
+      - hadoop-net
+
+
+networks:
+  hadoop-net:
+    driver: bridge
+
+volumes:
+  namenode_data:
+  datanode1_data:
+  datanode2_data:
