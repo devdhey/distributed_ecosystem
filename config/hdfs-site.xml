@@ -18,4 +18,10 @@
   <name>dfs.namenode.rpc-address</name>
   <value>namenode:8020</value>
 </property>
+<!-- Limitar o tamanho do Datanode -->
+<!-- 
+<property>
+  <name>dfs.datanode.du.reserved</name>
+  <value>10737418240</value> Reservar 10 GB para o sistema operacional 
+-->
 </configuration>
