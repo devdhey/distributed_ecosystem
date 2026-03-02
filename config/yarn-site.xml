@@ -8,4 +8,30 @@
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
   </property>
+ 
+  <!-- Configurações de memória para o YARN -->
+  <!-- No mundo do Hadoop, a unidade padrão para essas configurações de memória é o Megabyte (MB). -->
+
+  
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>2048</value> <!-- Quantidade total de RAM que cada NodeManager pode usar para executar containers do YARN -->
+  </property>
+  <!-- Configurações de alocação de memória para os containers do YARN -->
+  <property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>1024</value> <!-- Alocação máxima de RAM para cada container do YARN/ deve ser menor ou igual ao valor de yarn.nodemanager.resource.memory-mb   -->
+  </property> 
+  <!-- pode adicionar alocação mínima de memória caso seja necessário-->
+
+  <!-- propriedades para o hadoop não reclamar de memória virtual (comum em docker/wsl2)-->
+  <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value> <!-- Desabilita a verificação de memória virtual, útil para ambientes como Docker ou WSL2 onde a memória virtual pode ser reportada de forma diferente -->
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.vmem-pmem-ratio</name>
+    <value>2.1</value> <!-- Define a proporção entre memória virtual e física, mas como desabilitamos a verificação, isso não terá efeito -->
+  </property>
 </configuration>
