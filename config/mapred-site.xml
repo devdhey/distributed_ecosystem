@@ -6,12 +6,12 @@
 
   <!-- Definindo o quanto de memoria cada tarefa do map reduce pode usar -->
   <property>
-    <name>mapreduce.map.memory-mb</name>
+    <name>mapreduce.map.memory.mb</name>
     <value>800</value> <!-- Quantidade de RAM que cada tarefa de mapeamento pode usar -->
   </property>
 
   <property>
-    <name>mapreduce.reduce.memory-mb</name>
+    <name>mapreduce.reduce.memory.mb</name>
     <value>800</value> <!-- Quantidade de RAM que cada tarefa de redução pode usar -->
   </property>
 
@@ -24,6 +24,16 @@
     <name>mapreduce.reduce.java.opts</name>
     <value>-Xmx640m</value> <!-- Opções JVM para tarefas de redução (80% da RAM alocada) -->
   </property> <!-- isso evita erros de memoria fisica -->
+
+  <property>
+    <name>yarn.app.mapreduce.am.resource.mb</name>
+    <value>512</value> <!-- Quantidade de RAM que o Application Master do MapReduce pode usar -->
+  </property>
+
+  <property>
+    <name>yarn.app.mapreduce.am.command-opts</name>
+    <value>-Xmx400m</value> <!-- Opções JVM para o Application Master do MapReduce (80% da RAM alocada) -->
+  </property>
 
   <!-- Caminho para o hadoop escutar a pasta correta -->
   <property>

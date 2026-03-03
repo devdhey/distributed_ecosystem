@@ -8,7 +8,7 @@
 
     - yarn application -list
     - yarn application -list -appStates ALL {filtrar por estado como : RUNNING, ACCEPTED, FINISHED, etc}
-    - yarn application -list -appTypes MAPREDUCE
+    - yarn application -list -appTypes MAPREDUCE {filtrar por tipo de aplicação, como MAPREDUCE, SPARK, HIVE, etc}
     - yarn application -list -appTypes SPARK
     - yarn application -list -appTypes HIVE 
     
@@ -17,7 +17,7 @@
     - yarn node -list
     - yarn node -list -all {listar todos os nós, incluindo os que estão inativos}
     - yarn node -list -state RUNNING {listar apenas os nós que estão ativos e rodando aplicações}
-    - 
+    
 # Consultar Logs (pós-morte)
     - yarn logs -applicationId aplication_1772474633150_0001 {pegar os logs de uma aplicação específica usando seu ID}
     {No dia a dia, o erro raramente aparece no seu terminal; ele fica escondido nesses logs do YARN.}
